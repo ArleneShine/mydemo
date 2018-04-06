@@ -13,6 +13,7 @@
 from flask import (
     Flask
 )
+from flask_cors import CORS
 
 from configs import (
     DEBUG
@@ -21,5 +22,6 @@ from configs import (
 # Init Flask app
 app = Flask(__name__)
 app.debug = DEBUG
+CORS(app, resources=r'/*')
 
 
