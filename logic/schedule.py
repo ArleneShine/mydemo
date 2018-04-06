@@ -33,20 +33,21 @@ def logic_add_schedule(title, s_type, start_date, end_date):
     try:
         start_month = start_date[:7]
         end_month = end_date[:7]
+        event = {
+            '_id': str(ObjectId()),
+            Schedule.Field.title: title,
+            Schedule.Field.type: s_type,
+            Schedule.Field.startDate: start_date,
+            Schedule.Field.endDate: end_date,
+            Schedule.Field.startMonth: start_month,
+            Schedule.Field.endMonth: end_month,
+            Schedule.Field.create_time: datetime.now().strftime('%Y-%m-%d')
+        }
         schedule = Schedule.p_col.insert_one(
-            {
-                '_id': str(ObjectId()),
-                Schedule.Field.title: title,
-                Schedule.Field.type: s_type,
-                Schedule.Field.startDate: start_date,
-                Schedule.Field.endDate: end_date,
-                Schedule.Field.startMonth: start_month,
-                Schedule.Field.endMonth: end_month,
-                Schedule.Field.create_time: datetime.now().strftime('%Y-%m-%d')
-            }
+            event
         )
         if schedule:
-            return True
+            return event['_id']
         else:
             return False
     except:

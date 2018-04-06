@@ -48,9 +48,9 @@ def api_add_schedule():
         print traceback.print_exc()
         abort(400)
 
-    status = logic_add_schedule(title, s_type, start_date, end_date)
-    if status:
-        return jsonify(stat=1, msg="SUCCESS"), 200
+    event_id = logic_add_schedule(title, s_type, start_date, end_date)
+    if event_id:
+        return jsonify(stat=1, id=event_id), 200
     return jsonify(stat=0), 403
 
 
