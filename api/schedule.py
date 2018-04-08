@@ -64,7 +64,7 @@ def api_add_schedule():
         return jsonify(stat=0, msg="请先登录"), 403, {"Access-Control-Allow-Credentials": "true"}
 
 
-@api.route('/schedules/remove', methods=['DELETE'])
+@api.route('/schedules/remove', methods=['POST'])
 def api_delete_schedule():
     s_id = None
     try:
