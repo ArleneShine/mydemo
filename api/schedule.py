@@ -26,15 +26,15 @@ def api_get_schedules():
             month = '0%s' % month
     except:
         print traceback.print_exc()
-        abort(400)
+        return jsonify(stat=0, msg="参数错误"), 400, {"Access-Control-Allow-Credentials": "true"}
 
     # 判断用户
     user_name = request.cookies.get('username')
     if user_name:
         schedules = logic_get_schedules(year, month, user_name)
-        return jsonify(stat=1, schedules=schedules), 200
+        return jsonify(stat=1, schedules=schedules), 200, {"Access-Control-Allow-Credentials": "true"}
     else:
-        return jsonify(stat=0, msg="请先登录"), 403
+        return jsonify(stat=0, msg="请先登录"), 403, {"Access-Control-Allow-Credentials": "true"}
 
 
 @api.route('/schedules/add', methods=['POST'])
@@ -51,17 +51,17 @@ def api_add_schedule():
 
     except:
         print traceback.print_exc()
-        abort(400)
+        return jsonify(stat=0, msg="参数错误"), 400, {"Access-Control-Allow-Credentials": "true"}
 
     # 判断用户
     user_name = request.cookies.get('username')
     if user_name:
         event_id = logic_add_schedule(title, s_type, start_date, end_date, user_name)
         if event_id:
-            return jsonify(stat=1, id=event_id), 200
-        return jsonify(stat=0), 403
+            return jsonify(stat=1, id=event_id), 200, {"Access-Control-Allow-Credentials": "true"}
+        return jsonify(stat=0, msg="新增事件失败"), 403, {"Access-Control-Allow-Credentials": "true"}
     else:
-        return jsonify(stat=0, msg="请先登录"), 403
+        return jsonify(stat=0, msg="请先登录"), 403, {"Access-Control-Allow-Credentials": "true"}
 
 
 @api.route('/schedules/remove', methods=['DELETE'])
@@ -71,16 +71,16 @@ def api_delete_schedule():
         s_id = request.form.get('id').strip()
     except:
         print traceback.print_exc()
-        abort(400)
+        return jsonify(stat=0, msg="参数错误"), 400, {"Access-Control-Allow-Credentials": "true"}
 
     # 判断用户
     user_name = request.cookies.get('username')
     if user_name:
         status = logic_delete_schedule(s_id, user_name)
         if status:
-            return jsonify(stat=1, msg="SUCCESS"), 200
+            return jsonify(stat=1, msg="SUCCESS"), 200, {"Access-Control-Allow-Credentials": "true"}
         else:
-            return jsonify(stat=0, msg="用户名与事件id不对应"), 403
+            return jsonify(stat=0, msg="用户名与事件id不对应"), 403, {"Access-Control-Allow-Credentials": "true"}
     else:
-        return jsonify(stat=0, msg="请先登录"), 403
+        return jsonify(stat=0, msg="请先登录"), 403, {"Access-Control-Allow-Credentials": "true"}
 
