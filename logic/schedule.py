@@ -59,11 +59,13 @@ def logic_add_schedule(title, s_type, start_date, end_date, user_name):
         return False
 
 
-def logic_delete_schedule(s_id):
+def logic_delete_schedule(s_id, user_name):
     try:
+        user_id = logic_get_user_id(user_name)
         schedule = Schedule.p_col.delete_one(
             {
-                '_id': s_id
+                '_id': s_id,
+                Schedule.Field.userId: user_id
             }
         )
         if schedule:

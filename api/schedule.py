@@ -53,10 +53,15 @@ def api_add_schedule():
         print traceback.print_exc()
         abort(400)
 
-    event_id = logic_add_schedule(title, s_type, start_date, end_date)
-    if event_id:
-        return jsonify(stat=1, id=event_id), 200
-    return jsonify(stat=0), 403
+    # 判断用户
+    user_name = request.cookies.get('username')
+    if user_name:
+        event_id = logic_add_schedule(title, s_type, start_date, end_date, user_name)
+        if event_id:
+            return jsonify(stat=1, id=event_id), 200
+        return jsonify(stat=0), 403
+    else:
+        return jsonify(stat=0, msg="请先登录"), 403
 
 
 @api.route('/schedules/remove', methods=['DELETE'])
@@ -68,8 +73,14 @@ def api_delete_schedule():
         print traceback.print_exc()
         abort(400)
 
-    status = logic_delete_schedule(s_id)
-    if status:
-        return jsonify(stat=1, msg="SUCCESS"), 200
-    return jsonify(stat=0), 403
+    # 判断用户
+    user_name = request.cookies.get('username')
+    if user_name:
+        status = logic_delete_schedule(s_id, user_name)
+        if status:
+            return jsonify(stat=1, msg="SUCCESS"), 200
+        else:
+            return jsonify(stat=0, msg="用户名与事件id不对应"), 403
+    else:
+        return jsonify(stat=0, msg="请先登录"), 403
 
