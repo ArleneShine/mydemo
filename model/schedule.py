@@ -11,6 +11,7 @@ class Schedule(object):
     * `_id` (string)
     * `title` (string) - 事件名
     * `type` (string) - 事件分类
+    * `userId` (string) - 用户对应的id
     * `startDate` (string) - 事件开始时间
     * `endDate` (string) - 事件结束时间
     * `startMonth` (string) - 事件开始月份
@@ -29,11 +30,13 @@ class Schedule(object):
         _id = '_id'
         title = 'title'
         type = 'type'
+        userId = 'userId'
         startDate = 'startDate'
         endDate = 'endDate'
         startMonth = 'startMonth'
         endMonth = 'endMonth'
         create_time = 'create_time'
 
+    p_col.create_index(Field.userId, unique=False, sparse=False)
     p_col.create_index(Field.startMonth, unique=False, sparse=False)
     p_col.create_index(Field.endMonth, unique=False, sparse=False)

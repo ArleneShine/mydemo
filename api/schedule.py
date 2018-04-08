@@ -28,8 +28,13 @@ def api_get_schedules():
         print traceback.print_exc()
         abort(400)
 
-    schedules = logic_get_schedules(year, month)
-    return jsonify(stat=1, schedules=schedules), 200
+    # 判断用户
+    user_name = request.cookies.get('username')
+    if user_name:
+        schedules = logic_get_schedules(year, month, user_name)
+        return jsonify(stat=1, schedules=schedules), 200
+    else:
+        return jsonify(stat=0, msg="请先登录"), 403
 
 
 @api.route('/schedules/add', methods=['POST'])

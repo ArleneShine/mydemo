@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 from bson import ObjectId
@@ -6,12 +5,15 @@ import traceback
 from datetime import datetime
 
 from model.schedule import Schedule
+from logic.user import logic_get_user_id
 
 
-def logic_get_schedules(year, month):
+def logic_get_schedules(year, month, user_name):
+    user_id = logic_get_user_id(user_name)
     this_month = '%s-%s' % (year, month)
     schedules = Schedule.s_col.find(
         {
+            Schedule.Field.userId: user_id,
             Schedule.Field.startMonth: {
                 '$lte': this_month
             },
@@ -29,14 +31,16 @@ def logic_get_schedules(year, month):
     return [_ for _ in schedules]
 
 
-def logic_add_schedule(title, s_type, start_date, end_date):
+def logic_add_schedule(title, s_type, start_date, end_date, user_name):
     try:
+        user_id = logic_get_user_id(user_name)
         start_month = start_date[:7]
         end_month = end_date[:7]
         event = {
             '_id': str(ObjectId()),
             Schedule.Field.title: title,
             Schedule.Field.type: s_type,
+            Schedule.Field.userId: user_id,
             Schedule.Field.startDate: start_date,
             Schedule.Field.endDate: end_date,
             Schedule.Field.startMonth: start_month,
